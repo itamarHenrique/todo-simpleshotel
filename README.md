@@ -9,7 +9,6 @@ Ele permite que usuários façam cadastro, login, criem, editem, excluam e concl
 
 * **Soft Delete**: permite restaurar tarefas excluídas.
 * **Autenticação customizada**: com login, registro e logout usando `AuthController`.
-* **Bootstrap 5** e **Font Awesome 6**: para um layout limpo, responsivo e com ícones.
 * **Paginação e filtros**: facilita a visualização de tarefas.
 * **Validação no backend**: garante integridade dos dados antes de salvar no banco.
 
