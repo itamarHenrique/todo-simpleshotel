@@ -59,6 +59,7 @@ class TarefaController extends Controller
     public function update(TarefaRequest $tarefaRequest, Tarefa $tarefa)
     {
         $tarefa->update($tarefaRequest->validated());
+        
         return redirect()->route('tarefas.index')->with('success', 'Tarefa atualizada com sucesso');
     }
 
@@ -77,5 +78,12 @@ class TarefaController extends Controller
         $tarefa->restore();
 
         return redirect()->route('tarefas.index')->with('success', 'Tarefa restaurada com sucesso');
+    }
+
+    public function concluir(Tarefa $tarefa)
+    {
+        $tarefa->update(['status' => 'concluida']);
+
+        return redirect()->route('tarefas.index')->with('success', "Tarefa {$tarefa->titulo} concluída com sucesso");
     }
 }
