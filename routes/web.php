@@ -6,16 +6,36 @@ use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
-| 1. ROTAS PROTEGIDAS (Acessíveis APENAS a usuários logados)
+| 1. ROTAS DE AUTENTICAÇÃO E PERFIL (Acessíveis apenas se logado)
 |--------------------------------------------------------------------------
-| O Breeze cria uma rota de dashboard que já está em 'auth'.
-| Podemos mover seu código aqui.
+| Definindo o dashboard e o perfil logo no início.
+*/
+Route::middleware('auth')->group(function () {
+    
+    // ⬅️ DEFINIÇÃO DO DASHBOARD (A ROTA FALTANDO)
+    // Isso garante que o nome 'dashboard' seja definido para o seu sistema de navegação.
+    Route::get('/dashboard', function () {
+        // Redireciona o usuário para a página de Tarefas
+        return redirect()->route('tarefas.index');
+    })->name('dashboard'); 
+    
+    // Rotas de Gerenciamento de Perfil
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| 2. ROTAS DE FUNCIONALIDADE PRINCIPAL (Tarefas)
+|--------------------------------------------------------------------------
+| Rotas de Tarefas, também protegidas por 'auth'.
 */
 Route::middleware('auth')->group(function () {
     
     // Rota Raiz: Redireciona o usuário logado para a lista de tarefas
     Route::get('/', function () {
-        // Redireciona para /tarefas se estiver logado
         return redirect()->route('tarefas.index');
     });
 
@@ -24,18 +44,12 @@ Route::middleware('auth')->group(function () {
     
     // Rota específica para restaurar tarefas (fora do CRUD padrão)
     Route::post('tarefas/{id}/restore', [TarefaController::class, 'restore'])->name('tarefas.restore');
-
-    // Se quiser manter o dashboard do Breeze, você o faria aqui
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
 });
 
 
 /*
 |--------------------------------------------------------------------------
-| 2. ROTAS DE AUTENTICAÇÃO (Acessíveis a TODOS)
+| 3. ROTAS DE AUTENTICAÇÃO DO BREEZE (Login/Registro, Acessíveis a TODOS)
 |--------------------------------------------------------------------------
-| Este comando carrega as rotas de login, registro, etc., do arquivo auth.php,
-| garantindo que elas não estejam sob o middleware 'auth'.
 */
-
 require __DIR__.'/auth.php';
